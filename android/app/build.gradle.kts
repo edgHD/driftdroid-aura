@@ -12,8 +12,10 @@ android {
         applicationId = "com.driftdroid.android"
         minSdk = 29
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.4.0"
+        // DriftDroid Aura, a fork of DriftDroid 1.4.0. versionCode = upstream code (7) x 100 + this
+        // fork's build number, so it stays above upstream and keeps rising across fork releases.
+        versionCode = 701
+        versionName = "1.4.0-aura.1"
 
         ndk {
             abiFilters += "arm64-v8a"
@@ -81,4 +83,11 @@ dependencies {
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    // libarchive for mod downloads: GameBanana's Mario Kart Wii mods come as .zip, .7z and RAR5 .rar,
+    // and RAR5 has no pure-Java reader. BSD-licensed libarchive behind an Apache-2.0 JNI wrapper.
+    implementation("me.zhanghai.android.libarchive:library:1.1.4")
+
+    testImplementation("junit:junit:4.13.2")
+    // Android's org.json is a stub in local unit tests; this is the real implementation.
+    testImplementation("org.json:json:20240303")
 }

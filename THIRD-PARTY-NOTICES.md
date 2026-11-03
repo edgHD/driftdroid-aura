@@ -77,8 +77,13 @@ Source: <https://github.com/dolphin-emu/dolphin>
 
 ### App icon artwork - CC BY
 
-The app icon (`android/app/src/main/res/mipmap-*/ic_launcher*.png`, the Switch and Builder icons made
-from it) is a 3D render made for this project. It contains:
+The DriftDroid Aura Android icon and logo (`android/app/src/main/res/mipmap-*/ic_launcher*.png` and
+`drawable-xxhdpi/driftdroid_logo.png`) are artwork made for DriftDroid Aura. The Android robot in the
+icon is reproduced or modified from work created and shared by **Google** and used according to terms
+described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
+
+The Switch and Builder icons inherited from DriftDroid are a 3D render made for that project. It
+contains:
 
 - **"Kart"** by **absence_art**, <https://sketchfab.com/3d-models/kart-1eef98f88e804e3481d8b1bfb311ee06>,
   licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: the textures were
@@ -142,6 +147,16 @@ required for `libWiiCompiled.so`'s SDL3-based `JNI_OnLoad` to resolve its Java-s
 load time, at `android/app/src/main/java/org/libsdl/app/`. Taken unmodified from the same SDL
 source tree pinned below (`android-project/app/src/main/java/org/libsdl/app/`).
 Source: <https://github.com/libsdl-org/SDL>.
+
+### libarchive-android 1.1.4 - Apache-2.0, with libarchive - BSD
+
+The Android app's mod installer unpacks `.7z` and `.rar` archives with libarchive, through the
+`me.zhanghai.android.libarchive:library:1.1.4` JNI wrapper (fetched from Maven Central by Gradle and
+packaged into the APK as `libarchive-jni.so`). The wrapper is Copyright 2023 Google LLC, licensed
+under the Apache License 2.0. libarchive is Copyright Tim Kientzle and the libarchive contributors,
+licensed under the 2-clause BSD license; the native library also contains the compression libraries
+it is built with, each under its own license as listed by the wrapper project.
+Sources: <https://github.com/zhanghai/libarchive-android>, <https://github.com/libarchive/libarchive>.
 
 ---
 

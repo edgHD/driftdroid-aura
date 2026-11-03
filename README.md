@@ -1,169 +1,88 @@
+<p align="center">
+  <img src="android/app/src/main/res/drawable-xxhdpi/driftdroid_logo.png" alt="DriftDroid Aura" width="620">
+</p>
 
-# DriftDroid
-
-A native Android port of [WiiCompiled](https://github.com/patchzyy/Wiicompiled), a static
-recompilation of Mario Kart Wii to native code. This fork adds everything the game needs to be a
-phone app: touch controls, motion steering, a mobile settings menu and a launcher. The Android
-APK includes the translated game code but none of the game's files (courses, music, textures): those
-always come from your own disc. **DriftDroid Builder**, a Windows and Linux program, makes the Switch
-version, and an optional Android game pack with the newest Retro Rewind code, from your own disc.
-
-There's no emulator in the loop, no interpreter, no JIT, no PowerPC anywhere at runtime - the game
-runs as translated native ARM64 code, same as the original desktop project.
-
-> [!IMPORTANT]
-> There is no Nintendo code, no assets and no game data anywhere in this project or its releases.
-> You need your own legally dumped copy of the PAL version of the game. Nothing in this repo, in
-> any release APK, or in the build process contains or downloads Nintendo IP.
+<p align="center">
+  <b>Mario Kart Wii as a native Android app - now with a mod browser, live rooms, a leaderboard and a Mii editor.</b>
+</p>
 
 ---
 
-## Status
+**DriftDroid Aura** is a fork of [DriftDroid](https://github.com/dorPXP/driftdroid), the native
+Android port of [WiiCompiled](https://github.com/patchzyy/Wiicompiled). The game itself is unchanged
+from DriftDroid: it runs as statically recompiled ARM64 code - no emulator, no interpreter, no JIT.
+What Aura changes is everything around the game. The launcher has been rebuilt from scratch and
+picks up the features the [Wheel Wizard](https://github.com/TeamWheelWizard/WheelWizard) tool brings
+to PC players: install mods from GameBanana in one tap, see who's racing on Retro WFC right now,
+browse the VR leaderboard, and edit your Miis and licenses.
 
-DriftDroid is playable end to end: install the APK and pick your own disc image on the phone for
-the game's data. No PC is needed on Android. (A PC with DriftDroid Builder is needed for Switch, and
-optional on Android for the newest Retro Rewind code.)
+> [!IMPORTANT]
+> There is no Nintendo code, no assets and no game data anywhere in this project or its releases.
+> You need your own legally dumped copy of the **PAL** version of Mario Kart Wii. Nothing in this
+> repo, in any release APK, or in the build process contains or downloads Nintendo IP.
 
-- **Races, menus, audio, saves and online play work**, with touch controls or a
-  physical controller.
-- **Both Original Mario Kart Wii and Retro Rewind** are supported, chosen from
-  the launcher screen. Retro Rewind 6.13.4 is the version this release runs.
-- **The game code is in the APK.** DriftDroid Builder can also translate and compile it on your PC
-  from your own disc into a game pack (one zip) that the app imports and prefers: that is how a
-  newer Retro Rewind is supported before a new DriftDroid release.
-- **The game data comes from your disc, on the phone**: pick your disc image
-  and DriftDroid verifies it's a clean PAL `RMCP01` disc and extracts it.
+Current version: **1.4.0-aura.1**, based on DriftDroid 1.4.0 (Retro Rewind 6.13.4).
 
-It is still an active, personal fork rather than a finished product. Expect
-rough edges, and expect performance to vary a lot between devices - see
-[Performance](#performance).
+## What's new in Aura
 
-## What it does
+### A new launcher
 
-**Native rendering via aurora.** The graphics layer is built on
-[aurora](https://github.com/encounter/aurora), a source-level GameCube & Wii
-compatibility layer, running on Vulkan through Google's Dawn.
+A dark, full-screen launcher with a navigation rail - **Home, Mods, Rooms, Ranks, Profile,
+Settings** - instead of a column of buttons. Home shows both games with their Play/Install buttons,
+how many people are racing online, your racer, and your mods at a glance. Long jobs (installing
+Retro Rewind, downloading a mod, importing a game pack) show their progress in a task bar that
+follows you from page to page.
 
-**An OpenGL ES fallback.** Some phones ship a Vulkan driver too broken to start
-the game at all. The launcher's **Graphics...** screen can switch the renderer
-to OpenGL ES for those devices. It is slower than Vulkan by nature - OpenGL only
-lets one thread talk to the GPU, so shaders compile on the render thread and the
-multithreaded graphics path is unavailable - so leave it on Automatic unless
-Vulkan doesn't work for you.
+### Mods, without moving files around
 
-**Touch controls, tuned for Mario Kart Wii specifically.** Drag-anywhere
-steering joystick, GameCube-diamond-style face buttons, D-Pad (needed for bike
-wheelies), and L/R for items and drift. In the layout editor (Settings >
-Controls > Edit touch layout) you drag buttons to move them, pinch to resize,
-and tap one to hide it, fade it or recolour it (including how solid the colour
-is). Layouts can be saved, swapped, exported and imported; vertical and
-horizontal mode each keep their own layout and their own saved list.
-Double-tapping A can hold acceleration for you.
+- **Browse GameBanana** from inside the app: Mario Kart Wii mods by category (skins, tracks, UI,
+  other) or by search, with screenshots, descriptions and download counts.
+- **Install with one tap.** The file is downloaded and unpacked straight into the app - `.zip`,
+  `.7z` and `.rar` (including RAR5) all work.
+- **Manage what's installed**: turn mods on and off, drag them into priority order (the higher mod
+  wins when two change the same file), delete them, or import an archive you already have.
 
-**Motion controls.** Settings > Controls > Motion controls, "Steer with":
-- **Tilt**: tilt the phone like a wheel, with sensitivity, flip and "set
-  straight ahead".
-- **Wii Wheel**: the phone is handed to the game as a Wii Remote in a Wii Wheel,
-  so the game's own wheel code steers and shaking the phone does real tricks and
-  wheelies. The phone's own vibration is filtered out so it can't steer or trick.
-- **Stick** with **Shake for tricks**: steer with the stick, shake for tricks.
+Turned-on mods load the next time you start the game and apply to both Mario Kart Wii and Retro
+Rewind. Mods that replace Retro Rewind's own menu or race files only work on the Retro Rewind
+version they were made for.
 
-In every mode, pushing the stick sideways takes over the steering. With a real
-controller connected the phone's motion is paused and the controller plays like a
-normal controller (its D-pad does tricks). Wii Wheel and shake changes need a
-restart, which the menu does for you.
+### Rooms
 
-**Vertical mode (experimental).** Play upright like Mario Kart Tour: the race
-fills the tall screen, the race HUD moves to the corners and the touch controls
-get their own layout. Launcher > Graphics > Vertical mode.
+Every public Retro WFC room, live: which track is being raced, who's in it with their Miis and
+VR/BR, the room's average VR and whether it's open. It refreshes every 40 seconds while you're
+looking, and you can search for a player by name or friend code. Tap anyone to copy their friend
+code, add them as a friend, or open their profile. (Joining a room still happens inside the game.)
 
-**Save import and export.** Bring your profile over from a Wii NAND backup or
-Dolphin (`rksys.dat`), or copy it out, from the launcher's **Save data**.
+### Leaderboard
 
-**Picture settings.** Brightness, contrast and saturation in the Display
-settings.
+The top 100 players by VR, with a podium for the top three. Each player has a profile page with
+their rank, VR, how it moved over the last day, week and month, and a chart of the last 7 days.
+Look up any friend code to see where its owner stands.
 
-**Real controller support.** Controllers are fed to the game as a GameCube-style
-pad. Mappings are positional (`south`, `east`, `west`, `north`) rather than
-Xbox-labelled, so one config makes sense across Xbox, PlayStation, Nintendo and
-generic controllers.
+### Profile and Mii editor
 
-**Unlocked framerate with interpolation.** The original game is hard-locked to
-60 fps. The runtime can generate interpolated frames in between for a smoother
-feel on high-refresh displays.
+- **Licenses** from your saves (Mario Kart Wii and Retro Rewind keep separate ones): Mii, friend
+  code, VR and BR, races and wins, and the friend list with pending requests. Change which Mii a
+  license races as, or remove a friend.
+- **Miis**: every Mii on the console, with an editor for every part - face, hair, eyebrows, eyes,
+  nose, mouth, glasses, facial hair, mole, body and info - and a live picture. Make new Miis,
+  duplicate, delete, and import or export single Miis (`.rcd`) or the whole Mii file.
 
-> [!WARNING]
-> Interpolation is experimental and will show artifacts in specific scenarios.
-
-**A 30 FPS mode for phones that can't hold 60.** With **30 FPS races** turned
-on, every race uses the game's own 30 FPS mode - the one it uses for three- and
-four-player split-screen - so it plays at normal speed while drawing half as
-many frames, instead of running in slow motion. It works in the original game
-and in Retro Rewind, offline and online. Menus stay at 60, and Retro Rewind's
-time trials and ghost races stay at 60 because the mod requires it there.
-
-**It behaves like a phone app.** The game pauses when you background it instead
-of fast-forwarding through everything it missed, it can drop its render
-resolution when the device gets hot rather than sliding into a slideshow, and it
-mutes its own music while you play something else - without stealing audio
-focus from your music app.
-
-**An in-game settings menu**, reachable from the gear button or the Back
-button. It slides in from the side (in vertical mode it comes up from the bottom),
-the race stays visible behind it, and every change is saved the moment you make
-it. Pages Display, Controls and Sound:
-- Internal resolution, display mode, and FPS counter
-- Frame interpolation, copy filter, and shader-compilation behavior
-- 30 FPS races, and simpler computer karts for lighter races
-- Thermal resolution scaling and experimental multithreaded graphics
-- Touch control visibility and double-tap auto-hold
-- Controller assignment (pick a player and a controller from dropdowns) and full
-  per-button mapping, with presets
-- Vibration and its strength (the phone vibrates for a controller without a motor)
-- Volume sliders and instant mute
-
-Everything you change is saved to `Config.toml` on the device and restored on
-the next launch.
-
-## Performance
-
-This is native ARM64 code, not emulation, but Mario Kart Wii still asks a lot of
-a phone, and the honest summary is:
-
-- A cold phone holds 60 fps on the devices this has been tested on. A hot one
-  does not - sustained play throttles the SoC, and the port is CPU-bound, so
-  lowering the resolution only helps so much.
-- **Thermal resolution scaling** (on by default) trades pixels for frame rate
-  automatically as the device heats up.
-- **30 FPS races** (off by default) is the setting for a phone that can't hold
-  60: the race stays at normal speed and the phone has half as many frames to
-  draw.
-- **Simpler computer karts** (off by default) gives computer players the
-  lighter kart models the game uses in split-screen.
-- The first few minutes after installing are the worst, because shaders are
-  still compiling. It settles down. After an update the shaders are rebuilt in
-  the background on a single low-priority thread, so the phone stays cool while
-  it happens.
-- The display is held at the game's frame rate, so a 120 Hz phone does not
-  redraw twice per game frame.
-- Release builds can be compiled with a recorded profile of real play
-  (profile-guided optimization), which cuts the work per frame. See
-  [`docs/android-performance.md`](docs/android-performance.md) for how to
-  record one and how to measure a release build.
-- Debug builds are much slower than release builds, so don't judge the port by
-  one.
+Every change to your save or Mii file is checked, written with the correct checksum, and the
+previous file is kept next to it as a `.bak`. If the game is still open in the background, the app
+warns you first, because the game could write its own copy back over your change.
 
 ## Requirements
 
-- **Android 10 (API 29) or newer**, on a 64-bit ARM (`arm64-v8a`) chip. There is no 32-bit or
-  x86 build.
-- A working Vulkan driver for the best experience. Devices without one can fall back to OpenGL ES
-  from the launcher's **Graphics...** screen.
-- Enough free storage for the extracted game data (a few GB) plus headroom during the one-time
-  extraction step.
-- A clean, unmodified **PAL `RMCP01`** disc image of Mario Kart Wii (.iso or .wbfs), dumped by you.
-  Only the clean PAL revision is supported; other regions or modified executables are rejected.
-- **Optional, and needed for Switch:** a Windows 10/11 or Linux (x86-64) PC, once, to run DriftDroid Builder (about 10 GB of free space while it works for Android, 16 GB if you also build for Switch).
+- **Android 10 (API 29) or newer** on a 64-bit ARM (`arm64-v8a`) phone. There is no 32-bit or x86
+  build.
+- A working Vulkan driver for the best experience. Devices without one can switch to OpenGL ES in
+  **Settings → Graphics**.
+- Enough free storage for the extracted game data (a few GB), plus about 2 GB for Retro Rewind.
+- A clean, unmodified **PAL `RMCP01`** disc image of Mario Kart Wii (`.iso` or `.wbfs`), dumped by
+  you. Other regions and modified executables are rejected.
+- An internet connection for the online pages (Mods browser, Rooms, Leaderboard) and Retro Rewind
+  downloads. Everything else works offline.
 
 > [!NOTE]
 > Nobody here will tell you where to get the game. Dumping your own disc is on you, and links to
@@ -171,40 +90,118 @@ a phone, and the honest summary is:
 
 ## Installing
 
-From this repo's [Releases](https://github.com/dorPXP/driftdroid/releases) page, get the APK (and
-**DriftDroid Builder**, a zip of the same version, if you want the Switch version or a game pack).
-The app isn't on the Play Store.
+Get the APK from this repository's [Releases](https://github.com/edgHD/driftdroid-aura/releases)
+page. The app isn't on the Play Store.
 
-1. Install the APK on your phone.
-2. Open it, tap **Install with ISO/WBFS** and pick your disc image. The first time, DriftDroid
-   extracts the game's data on the phone.
-3. For Retro Rewind, tap **Install** on its card.
+1. Install the APK.
+2. Open it and tap **Install with ISO/WBFS** on the Mario Kart Wii card, then pick your disc image.
+   The first time, the app extracts the game's data on the phone.
+3. For Retro Rewind, tap **Install** on its card - the app downloads it from Retro Rewind's own
+   server, or takes a `.zip` or folder you already have.
 
-To update, install the new APK over the old one - saves, the extracted game data and Retro Rewind
-all stay.
+To update DriftDroid Aura, install the new APK over the old one. Saves, the extracted game data,
+Retro Rewind and your mods all stay.
 
-**Optional: a game pack.** On your PC, unpack DriftDroid Builder, open `DriftDroidBuilder.exe`
-(Linux: `DriftDroidBuilder`), choose your disc image, pick Android and press **Start**. It takes 30
-minutes to a couple of hours and makes `output/DriftDroid-GamePack-<version>.zip`. Copy it to the
-phone and tap **Import Game Pack...**: the app then uses that game code, for example a newer Retro
-Rewind. A game pack fits one app version, so make a new one with the matching builder.
+> [!WARNING]
+> **Coming from the official DriftDroid?** DriftDroid Aura uses the same app id but is signed with
+> a different key, so Android won't install it over DriftDroid. Uninstalling DriftDroid deletes its
+> data, so first export your saves (**Save data** in DriftDroid, or **Settings → Save data** here) and
+> your Miis, then uninstall, install DriftDroid Aura, and import them again.
 
-DriftDroid Builder also makes the **Switch** version (`DriftDroid.nro` and `RetroRewind.nro`); that
-needs devkitPro's "Switch Development" tools installed on the PC.
+**Game packs (optional).** Release APKs contain the game code. DriftDroid Aura doesn't change it, so it
+uses [DriftDroid Builder](https://github.com/dorPXP/driftdroid/releases) from the original project:
+run the Builder of the matching DriftDroid version (1.4.0) on a PC, then import the pack with
+**Settings → Import game pack**. A game pack is only needed for a newer Retro Rewind than the one
+built in. The Builder is also how the original project makes its Switch version.
 
 > [!CAUTION]
-> Only take builds from this repository's own Releases page. Don't install an APK someone shared
-> through Discord or a random download site.
+> Only install builds from this repository's own Releases page. Don't install an APK someone shared
+> on Discord or a random download site.
+
+## What the app connects to
+
+Only when you use the feature that needs it:
+
+| Service | Used for |
+| --- | --- |
+| `update.rwfc.net`, `cdn.update.rwfc.net` | Downloading and updating Retro Rewind |
+| `rwfc.net` | Rooms and the Leaderboard (Retro WFC's public API, read-only) |
+| `gamebanana.com` and its subdomains | Browsing and downloading mods (GameBanana's public API) |
+| `studio.mii.nintendo.com` | Pictures of Miis. The Mii's appearance is sent to Nintendo's public Mii renderer. Turn **Settings → Mii pictures** off to use simple offline drawings instead |
+
+Online play itself goes to the Retro WFC servers from inside the game, exactly as on a Wii or in
+Dolphin. Nothing is collected by this project.
+
+## Everything else, from DriftDroid
+
+Aura keeps all of DriftDroid's game-side features:
+
+- **Native rendering** through [aurora](https://github.com/encounter/aurora) on Vulkan (Dawn), with
+  an **OpenGL ES fallback** for phones whose Vulkan driver is broken.
+- **Touch controls** made for Mario Kart Wii - drag-anywhere steering, face buttons, D-Pad and L/R -
+  with a layout editor (move, resize, hide, recolour), separate layouts for landscape and vertical
+  mode, and optional double-tap to hold accelerate.
+- **Motion controls**: tilt steering, the phone as a Wii Wheel (real tricks and wheelies by shaking),
+  or stick steering with shake for tricks.
+- **Real controllers**, mapped by position so one setup works for Xbox, PlayStation, Nintendo and
+  generic pads, with full per-button remapping.
+- **Vertical mode** (experimental): play upright, with the HUD moved to the corners.
+- **Performance options**: frame interpolation for high-refresh screens, a **30 FPS races** mode for
+  phones that can't hold 60, simpler computer karts, and resolution that drops when the phone gets
+  hot.
+- **Phone behaviour**: pauses when backgrounded, mutes its own music while you play something else,
+  and vibrates the phone for a controller without a motor.
+- **An in-game settings menu** from the gear button or the Back button, saved to `Config.toml` the
+  moment you change something.
+- **Retro Rewind support**: install it from the official server or from a copy you have, and apply its
+  small per-version updates instead of downloading 2 GB again.
+
+### Retro Rewind versions
+
+Retro Rewind's game logic lives in `Binaries/Code.pul`, and because the game is compiled ahead of
+time rather than emulated, that file has to be compiled into the app. So:
+
+- A Retro Rewind update that changes only **tracks, characters or other assets** works immediately.
+- An update that changes **game code** needs a new build (or a new game pack). The app detects this
+  before downloading anything large and leaves your working install alone.
+
+## Tips and troubleshooting
+
+**It won't start / the screen stays black.** Usually a Vulkan driver that doesn't really work. Go to
+**Settings → Graphics**, choose **OpenGL ES** and try again.
+
+**It runs at 60 fps, then slows down.** That's the phone throttling as it heats up. Keep "Lower
+resolution when the phone gets hot" on in the in-game settings.
+
+**It never reaches 60 and looks like slow motion.** Turn on **30 FPS races** in the in-game
+settings. Races then run at normal speed with half the frames.
+
+**Retro Rewind crashes after an update, or when opening Retro WFC.** Most likely a mod made for an
+older Retro Rewind. Turn mods off on the **Mods** page and try again.
+
+**A mod didn't change anything.** Mods load when the game starts: close the game fully (from
+Recents) and start it again. If two mods change the same file, the one higher in the list wins.
+
+**A mod won't install.** Password-protected archives can't be unpacked, and some GameBanana files
+aren't archives at all (those show as "not supported"). Use **Open on GameBanana** to see what the
+author intended.
+
+**Characters are stretched, or invisible.** Snapdragon GPU driver issues with fixes in the in-game
+settings (**Fix stretched graphics** and **Fix missing characters**). On Snapdragon phones you can
+also try another GPU driver under **Settings → Graphics → GPU driver**; see
+[`docs/android-gpu-compatibility.md`](docs/android-gpu-compatibility.md).
+
+**My Switch Pro Controller doesn't rumble.** Android's Bluetooth driver doesn't expose that
+controller's rumble motor; it can't be fixed from an app. Most Xbox and PlayStation pads do rumble.
+
+**Something crashed.** Export a log with **Settings → Export diagnostics** (review it before
+sharing) and open an issue.
 
 ## Building from source
 
-Owning the game is still required even if you compile everything yourself. You'll need:
-
-- Android Studio / the Android SDK and NDK (this project targets `arm64-v8a`)
-- CMake and Ninja
-- A JDK compatible with the Gradle version in `android/`
-
-Build the native runtime and the app:
+Owning the game is still required even if you compile everything yourself. You'll need the Android
+SDK and NDK (the app targets `arm64-v8a`), CMake and Ninja, and a JDK that suits the Gradle version
+in `android/`.
 
 ```bash
 # native runtime (produces libWiiCompiled.so / libGameCombined.so)
@@ -214,224 +211,75 @@ cmake --build <your-android-build-dir>
 cd android && ./gradlew assembleRelease
 ```
 
-A build made this way carries the game code inside the APK. Release APKs do too, and also carry a
-toolkit id (`assets/toolkit-id.txt`), so a game pack made by DriftDroid Builder with the same id takes
-over the code in the APK. DriftDroid Builder is made from a finished build by `tools/pc-builder/extract_plan.py`
-and `tools/pc-builder/make_toolkit.sh`; how it works is in [`docs/pc-builder.md`](docs/pc-builder.md).
-Switch files, controls and log messages are in [`docs/switch.md`](docs/switch.md).
+The launcher's own code lives in `android/app/src/main/kotlin/com/driftdroid/android/` - the pages
+in `launcher/`, and the mod, online, Mii and save-file code in `mods/`, `online/`, `mii/` and
+`profile/`. Its unit tests run on the desktop JVM:
 
-Build `assembleRelease` for anything you intend to measure. Debug builds enable Android's runtime
-checks and are substantially slower.
-
-Launch both the original game and Retro Rewind once before calling a build good - they use
-different libraries. Profile-guided builds, measuring and the build traps that have bitten this
-project are written up in [`docs/android-performance.md`](docs/android-performance.md).
-
-This project also still carries the original desktop build (Windows, via the .NET translator and
-Launcher under `translator/` and `Launcher/`) from upstream WiiCompiled - see
-[`translator/README.md`](translator/README.md) if you're interested in that side instead.
-
-## A note on related projects
-
-WiiCompiled, KartPad, Wheel Wizard, Retro Rewind, and other related projects are developed
-**independently** and each has its own contribution rules. What applies here does not
-automatically apply there, and vice versa.
-
-## Retro Rewind
-
-[Retro Rewind](https://wiki.tockdom.com/wiki/Retro_Rewind) is a separate, optional community mod -
-nothing in this repo or any release bundles it, the same way nothing here includes the base game.
-The app's first screen lets you choose Original Mario Kart Wii or Retro Rewind; picking Retro
-Rewind before it's installed walks you through getting it set up, three ways:
-
-1. **Download it** - the app asks the mod's own official update service
-   (`update.rwfc.net`, the same one Wheel Wizard and the Retro Rewind updater use) which release
-   is newest, and fetches it straight from there: the newest full download, then any small
-   updates released on top of it. Nothing is mirrored or re-hosted here, and the game code in
-   every download is checked against this build before it's installed.
-2. **Select the `.zip` file** you already downloaded - the app extracts it for you, no separate
-   unzip step needed.
-3. **Select a folder**, if you've already extracted it yourself. Use this one if you're bringing
-   an install over from Dolphin with your own mods in it - your files are copied as they are.
-
-Either way the pack lands in place (~2GB, so it takes a few minutes) and you're done: no manual
-file management, no computer required. Downloads resume where they left off if your connection
-drops, and the copy keeps running while you're in another app.
-
-### Retro Rewind versions
-
-Retro Rewind releases more often than this app does, so the app checks what's actually out there
-rather than knowing about one hardcoded release, and **"Check for updates"** in the Retro Rewind
-menu applies the mod's own small per-version update archives - a few megabytes instead of
-re-downloading the whole pack.
-
-There is one real limit worth understanding. Retro Rewind's *game logic* lives in
-`Binaries/Code.pul`, and because DriftDroid compiles everything to native code ahead of time
-rather than emulating a Wii, that file has to be compiled into the app itself - it can't be picked
-up on your phone at runtime. So:
-
-- A Retro Rewind update that changes **tracks, characters or other assets** works immediately, with
-  no app update at all.
-- A Retro Rewind update that changes **game code** needs a new DriftDroid build (and a new game
-  pack made with its builder). The app detects this before downloading anything large, tells you,
-  and leaves your working install alone rather than replacing it with something that would crash.
-  When that new DriftDroid build is out, run its DriftDroid Builder on your PC to make the new
-  game pack.
-- After DriftDroid itself has been updated for a newer Retro Rewind, an install still on the old
-  one is brought up to date when you tap Retro Rewind, before the game starts.
-
-Mods that replace Retro Rewind's own menu or race files are tied to the Retro Rewind version they
-were made from. One made for 6.12.8 can crash on 6.13 (for example when opening Retro WFC) until
-it is rebuilt.
-
-This is also why importing a Retro Rewind copy from somewhere else can be refused: it's checked
-against the code this build was compiled for. Character/track mods in an otherwise-supported
-install are fine - those are assets, and they're preserved.
-
-Both the Riivolution-style file-overlay system this depends on, and a network stack built
-specifically to talk to the community Retro-WFC service, are shared with upstream WiiCompiled's
-runtime and already wired up on Android.
-
-## FAQ
-
-**Is this an emulator?**
-No. Everything is compiled to native code before you ever press play. At runtime there's nothing
-emulating a Wii CPU or GPU.
-
-**Do you provide the game?**
-No. Don't ask. Nothing in this repo or any release contains Nintendo code or assets.
-
-**Which game version works?**
-Clean PAL `RMCP01`. Other regions and modified executables are rejected outright.
-
-**Can I use the newest Retro Rewind version?**
-If it only changed assets, yes - the app picks it up on its own. If it changed game code, it needs
-a DriftDroid update first; the app will say so instead of installing something broken. See
-[Retro Rewind versions](#retro-rewind-versions).
-
-**How do I update DriftDroid?**
-Install the new APK over the old one and import the game pack made by the same version of
-DriftDroid Builder. Saves, settings and Retro Rewind stay.
-
-**Is there gonna be a Switch version?**
-There is one: [DriftDroid for Nintendo Switch - Beta 1](https://github.com/dorPXP/driftdroid/releases/tag/switch-beta1)
-(a pre-release, original game only). Retro Rewind on Switch is being worked on.
-
-**Is it done?**
-No - this is an active, personal work-in-progress fork. It's playable start to finish, but
-performance work, device compatibility and bug fixing are ongoing.
-
-**It won't start / the screen stays black.**
-Most often a Vulkan driver the device can't actually deliver on. Open the launcher, tap
-**Graphics...**, choose **OpenGL ES**, and try again. Report it either way - which renderer worked
-is exactly the information that's useful.
-
-**It runs at 60 fps and then gets slower.**
-That's thermal throttling, not a bug in the build. See [Performance](#performance). Leaving
-"Lower resolution when the phone gets hot" enabled keeps the frame rate steadier as the device
-heats up.
-
-**It never reaches 60, and everything looks like slow motion.**
-Turn on **30 FPS races** in the settings menu. The race then runs at normal speed with half
-the frames. It applies from the next race.
-
-**Retro Rewind crashes when I open Retro WFC or a menu after updating.**
-Most likely a mod that replaces Retro Rewind's own files and was made for an older Retro Rewind.
-Turn your mods off in **Mods...** and try again; if that fixes it, the mod needs a version made
-for the Retro Rewind you have now.
-
-**Characters or menu icons are stretched across the screen.**
-A driver bug on Snapdragon 8 Elite class GPUs (Adreno 8xx). The fix turns itself on for those
-GPUs; if you still see it, set **Fix stretched graphics (Snapdragon)** in the settings menu to
-**Everything**, or try a different GPU driver (next question).
-
-**Can I use a different GPU driver?**
-On Snapdragon phones, yes: **Graphics...** -> **GPU driver...** installs an AdrenoTools driver
-package such as Turnip. DriftDroid does not ship drivers; where to get them and how to check which
-one is active is in [`docs/android-gpu-compatibility.md`](docs/android-gpu-compatibility.md).
-
-**I picked Vulkan but it says OpenGL ES.**
-The game shows a notice at start when the renderer you chose could not start and another one was
-used. Please report the device and GPU - that is exactly the list that needs fixing.
-
-**Some characters or objects are invisible.**
-A few Adreno GPUs miscompile one of the shaders. Enable **Fix missing characters (some Adreno
-GPUs)** in the settings menu. It turns itself on for the Adreno 750 (Galaxy S24 class).
-
-**The game crashed / stopped with an error.**
-Open an issue with the crash template. If you're on a debug build you can pull the run log with:
+```bash
+cd android && ./gradlew :app:testDebugUnitTest
 ```
-adb shell run-as com.driftdroid.android cat files/WiiCompiled/android_runtime_attempt.log
-```
-(Release builds aren't debuggable, so `run-as` won't work on them.)
 
-**How do I open the settings if I hid the gear button?**
-Press the phone's Back button.
-
-**Why doesn't my Switch Pro Controller rumble?**
-Confirmed at the kernel level (`adb shell getevent -pl`): stock Android's Bluetooth HID gamepad
-driver doesn't expose any force-feedback capability for this controller at all - Nintendo's
-rumble motor uses its own proprietary HID protocol, not the generic one Android supports. This
-isn't something the app can fix from user space; it would need a from-scratch low-level HID
-output-report driver specifically for Nintendo controllers. Controllers with real Android-exposed
-vibrator support (most Xbox/PlayStation-style pads) should rumble correctly.
+Build `assembleRelease` for anything you intend to measure; debug builds are much slower. How game
+packs and DriftDroid Builder work is in [`docs/pc-builder.md`](docs/pc-builder.md), performance work
+in [`docs/android-performance.md`](docs/android-performance.md), and the Switch side in
+[`docs/switch.md`](docs/switch.md). The desktop build from upstream WiiCompiled is still here under
+`translator/` and `Launcher/` - see [`translator/README.md`](translator/README.md).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Short version: changes to the Android app, touch controls,
-launcher and phone-specific rendering belong here; changes to the recompiler itself or to game
-behavior belong upstream in WiiCompiled. Anything touching input, rendering or audio needs a test
-on a real device.
+Issues and pull requests for the launcher - the redesign, Mods, Rooms, Leaderboard, Profile and the
+Mii editor - belong here. Changes to the recompiled game, the runtime or touch controls are better
+sent to [DriftDroid](https://github.com/dorPXP/driftdroid), and changes to the recompiler itself to
+[WiiCompiled](https://github.com/patchzyy/Wiicompiled), so everyone benefits. See
+[CONTRIBUTING.md](CONTRIBUTING.md). Anything that touches input, rendering or audio needs a test on
+a real device.
 
 ## AI usage
-AI coding tools were used extensively during development of this fork, including for debugging,
-implementation, and this README. Physics accuracy inherited from upstream WiiCompiled is proven
-synced across Wii, Dolphin, and WiiCompiled via matching ghost ​replays (input-based, not
-position-tracked).
+
+AI coding tools were used extensively in this fork, including for the Aura launcher, its features
+and this README. The changes were built, covered by unit tests where they read or write data
+formats (saves, the Mii file, archives, the online APIs), and checked on an Android emulator.
 
 ## Credits
 
-- **[patchzyy/WiiCompiled](https://github.com/patchzyy/Wiicompiled)** - the static recompilation
-  project this Android port is built on top of.
-- **[aurora](https://github.com/encounter/aurora)** by Luke Street and contributors - the GX
-  rendering/windowing backend this project's whole graphics layer sits on. MIT licensed.
-- **[Dawn](https://dawn.googlesource.com/dawn)** - Google's WebGPU implementation, powering
-  aurora's Vulkan and OpenGL ES backends on Android.
-- **[Dolphin Emulator](https://github.com/dolphin-emu/dolphin)** - an invaluable reference for Wii
-  hardware behavior, plus the source of the free DSP coefficient ROM and the unmodified default
-  WiiConnect24 bootstrap tree bundled with the runtime.
-- **[Retro Rewind](https://wiki.tockdom.com/wiki/Retro_Rewind)** by ZPL and team - the mod
-  distribution the underlying runtime supports.
-- **[KartPad](https://github.com/chrissotraidis/kartpad)** by Chris Sotraidis - the iOS/Android
-  sibling port this fork's settings sidebar layout, touch control styling, and motion (tilt)
-  steering calibration curve were directly modeled on, and the source of several GX command
-  processor fixes, the in-app updater, and the phone vibration fallback and vibration strength
-  setting this fork carries.
-- **App icon**: a 3D render made for this project in Blender. The kart is
-  **"Kart" by [absence_art](https://sketchfab.com/absence_art)** on Sketchfab
-  (<https://sketchfab.com/3d-models/kart-1eef98f88e804e3481d8b1bfb311ee06>), licensed
-  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); it was repainted, posed and rendered
-  with the Android robot and the effects. The Android robot is reproduced or modified from work
-  created and shared by Google and used according to terms described in the
+- **[DriftDroid](https://github.com/dorPXP/driftdroid)** by dorPXP - the Android port this fork is
+  built on, and DriftDroid Builder.
+- **[WiiCompiled](https://github.com/patchzyy/Wiicompiled)** by patchzyy - the static recompilation
+  of Mario Kart Wii underneath it all.
+- **[Wheel Wizard](https://github.com/TeamWheelWizard/WheelWizard)** by Team Wheel Wizard - the PC
+  tool whose features Aura brings to Android, and the reference for its Retro WFC and GameBanana API
+  use, the Mii renderer encoding, the save-file and Mii-file layouts, and friend-code math.
+- **[Retro Rewind](https://wiki.tockdom.com/wiki/Retro_Rewind)** by ZPL and team, and **Retro WFC**,
+  whose public API powers Rooms and the Leaderboard.
+- **[GameBanana](https://gamebanana.com/games/5896)** and the mod authors whose work the Mods page
+  lists.
+- **[aurora](https://github.com/encounter/aurora)** by Luke Street and contributors (MIT),
+  **[Dawn](https://dawn.googlesource.com/dawn)**, and
+  **[Dolphin Emulator](https://github.com/dolphin-emu/dolphin)** - graphics backend, WebGPU and Wii
+  hardware reference, carried over from DriftDroid.
+- **[KartPad](https://github.com/chrissotraidis/kartpad)** by Chris Sotraidis - the sibling port that
+  DriftDroid's settings drawer, touch controls and motion steering were modelled on.
+- **[libarchive](https://www.libarchive.org/)** (BSD) through
+  **[libarchive-android](https://github.com/zhanghai/libarchive-android)** (Apache 2.0) - unpacking
+  `.7z` and `.rar` mods.
+- **Material Design icons** by Google (Apache 2.0) in the launcher.
+- **App icon and logo**: made for DriftDroid Aura. The Android robot in the icon is reproduced or
+  modified from work created and shared by Google and used according to terms described in the
   [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
-- Every fix taken from these projects, with its author and source, is listed in
-  [`docs/ported-changes.md`](docs/ported-changes.md).
-- Everyone in the static recompilation community.
 
-Bundled third-party components and their licenses live in
+Every fix taken from other projects is listed in [`docs/ported-changes.md`](docs/ported-changes.md),
+and bundled third-party components and their licenses in
 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
 
 ## License
 
-WiiCompiled is free software: you can redistribute it and/or modify it under the terms of the
-[GNU General Public License, version 3](LICENSE) as published by the Free Software Foundation.
+DriftDroid Aura, like DriftDroid and WiiCompiled, is free software: you can redistribute it and/or
+modify it under the terms of the [GNU General Public License, version 3](LICENSE) as published by
+the Free Software Foundation. It is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details. Any Mario Kart Wii distribution making use of
+WiiCompiled must be licensed under GPL v3.0.
 
-WiiCompiled is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-General Public License for more details.
-
-Any mkwii distribution making use of WiiCompiled must be licensed under GPL v3.0.
-
-Not affiliated with, endorsed by, or associated with Nintendo. Mario Kart Wii is a trademark of
-Nintendo. No Nintendo intellectual property is contained in, distributed with, or obtainable
-through this project.
+Not affiliated with, endorsed by, or associated with Nintendo, Retro Rewind, GameBanana or Team
+Wheel Wizard. Mario Kart Wii and Mii are trademarks of Nintendo. No Nintendo intellectual property
+is contained in, distributed with, or obtainable through this project.
