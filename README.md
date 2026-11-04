@@ -3,18 +3,34 @@
 </p>
 
 <p align="center">
-  <b>Mario Kart Wii as a native Android app - now with a mod browser, live rooms, a leaderboard and a Mii editor.</b>
+  <b>Mario Kart Wii and Retro Rewind as a native Android app, with mods, live rooms, a leaderboard
+  and a Mii editor built in.</b>
+</p>
+
+<p align="center">
+  <a href="https://github.com/edgHD/driftdroid-aura/releases/latest"><b>Download the latest APK</b></a>
+  ·
+  <a href="#installing">How to install</a>
+  ·
+  <a href="#screenshots">Screenshots</a>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/landscape-home.jpg" alt="The DriftDroid Aura home screen in landscape, with the navigation rail on the left and the Retro Rewind and Mario Kart Wii cards" width="820">
 </p>
 
 ---
 
-**DriftDroid Aura** is a fork of [DriftDroid](https://github.com/dorPXP/driftdroid), the native
-Android port of [WiiCompiled](https://github.com/patchzyy/Wiicompiled). The game itself is unchanged
-from DriftDroid: it runs as statically recompiled ARM64 code - no emulator, no interpreter, no JIT.
-What Aura changes is everything around the game. The launcher has been rebuilt from scratch and
-picks up the features the [Wheel Wizard](https://github.com/TeamWheelWizard/WheelWizard) tool brings
-to PC players: install mods from GameBanana in one tap, see who's racing on Retro WFC right now,
-browse the VR leaderboard, and edit your Miis and licenses.
+**DriftDroid Aura** gives Mario Kart Wii and Retro Rewind on Android what the
+[Wheel Wizard](https://github.com/TeamWheelWizard/WheelWizard) tool gives PC players, all inside
+one app: install mods from GameBanana with a tap, see who's racing on Retro WFC right now, check
+the VR leaderboard, and edit your Miis and licenses. Everything is done on the phone - no file
+manager, no PC.
+
+Under the new launcher is [DriftDroid](https://github.com/dorPXP/driftdroid), the native Android
+port of [WiiCompiled](https://github.com/patchzyy/Wiicompiled), left exactly as it is. The game
+runs as statically recompiled ARM64 code - no emulator, no interpreter, no JIT - and plays with
+touch controls, motion steering or a real controller.
 
 > [!IMPORTANT]
 > There is no Nintendo code, no assets and no game data anywhere in this project or its releases.
@@ -22,6 +38,30 @@ browse the VR leaderboard, and edit your Miis and licenses.
 > repo, in any release APK, or in the build process contains or downloads Nintendo IP.
 
 Current version: **1.4.0-aura.1**, based on DriftDroid 1.4.0 (Retro Rewind 6.13.4).
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/home.jpg" alt="Home: both games with their install buttons, racers online, your racer and your mods" width="260"><br><sub><b>Home</b> - both games, who's online, your racer and mods</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/mods.jpg" alt="Mods: browsing Mario Kart Wii track mods on GameBanana" width="260"><br><sub><b>Mods</b> - browse GameBanana and install with a tap</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/rooms.jpg" alt="Rooms: live public Retro WFC rooms with track, racers and average VR" width="260"><br><sub><b>Rooms</b> - every public Retro WFC room, live</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/ranks.jpg" alt="Ranks: the top 100 Retro WFC players by VR with a podium" width="260"><br><sub><b>Ranks</b> - the top 100 by VR</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/profile.jpg" alt="Profile: a license with its Mii, friend code, VR, BR and wins" width="260"><br><sub><b>Profile</b> - your licenses and friends</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/mii-editor.jpg" alt="Mii editor: picking a hairstyle from pictures of your own Mii" width="260"><br><sub><b>Mii editor</b> - pick each part from pictures of your Mii</sub></td>
+  </tr>
+</table>
+
+On tablets and gaming handhelds the launcher turns sideways, with a navigation rail down the side:
+
+<p align="center">
+  <img src="docs/screenshots/landscape-rooms.jpg" alt="Rooms in landscape on a wide screen, two columns of rooms next to the navigation rail" width="820">
+</p>
+
+<sub>Screenshots of 1.4.0-aura.1. Rooms, Ranks and the Mods browser show live data from Retro WFC
+and GameBanana, so what you see will differ.</sub>
 
 ## What's new in Aura
 
