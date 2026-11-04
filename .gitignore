@@ -88,6 +88,7 @@ hermes/
 android/local.properties
 android/.gradle/
 android/.idea/
+android/build/
 android/*/build/
 android/*/.cxx/
 android/captures/
@@ -97,6 +98,14 @@ android/.externalNativeBuild/
 # contain the user's own compiled/translated game code - same "never commit game-derived output"
 # rule as /generated/, /build/, /Assets/ above. Never committed, never distributed via the repo.
 android/*/src/main/jniLibs/
+# The toolkit id that goes with those libraries in a release build (assets/toolkit-id.txt).
+android/*/src/main/assets/toolkit-id.txt
+
+# Release signing keys and their passwords live outside the repo; never commit one by accident.
+*.jks
+*.keystore
+keystore.properties
+release-signing.properties
 
 # Reference clone of another project (chrissotraidis/kartpad), pulled locally for research only -
 # not part of this project and must never be committed here.
