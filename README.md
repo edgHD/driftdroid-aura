@@ -45,9 +45,13 @@ game pack) show their progress in a task bar that follows you from page to page.
 - **Manage what's installed**: turn mods on and off, drag them into priority order (the higher mod
   wins when two change the same file), delete them, or import an archive you already have.
 
-Turned-on mods load the next time you start the game and apply to both Mario Kart Wii and Retro
-Rewind. Mods that replace Retro Rewind's own menu or race files only work on the Retro Rewind
-version they were made for.
+Turned-on mods load when you press Play (a game that's already running restarts so the change
+takes) and apply to both Mario Kart Wii and Retro Rewind. For Retro Rewind they're also laid out
+in its own `Patches` folder the way the Wheel Wizard PC tool does it, so mods built on Retro
+Rewind's loose archive overrides (files like `Name.race.szs`) work too. Riivolution-style mods
+have their options switched on, and menu files made for the US version (`Race_U.szs`) are also
+used for the European disc. Mods that replace Retro Rewind's own menu or race files only work on
+the Retro Rewind version they were made for.
 
 ### Rooms
 
